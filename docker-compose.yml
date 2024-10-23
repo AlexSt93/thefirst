@@ -1,0 +1,48 @@
+services:
+
+  # Oracle service (label used to access the service container)
+  oracle:
+
+    # Docker Hub image (feel free to change the tag "latest" to any other available one)
+    image: gvenzl/oracle-xe:slim
+    container_name: oracle
+
+    # Provide passwords and other environment variables to container
+    environment:
+      ORACLE_PASSWORD: oracle
+    networks:
+      spring-net:
+
+    volumes:
+      - ./scripts:/container-entrypoint-initdb.d
+    # Forward Oracle port
+    ports:
+      - "1521:1521"
+    healthcheck:
+      test: [ "CMD", "/opt/oracle/healthcheck.sh"]
+      interval: 10s
+      start_period: 60s
+      timeout: 5s
+      retries: 10
+
+  thefirst:
+    image: thefirst
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8181:8181"
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@//oracle:1521/XEPDB1
+#      - SPRING_DATASOURCE_USERNAME=test
+#      - SPRING_DATASOURCE_PASSWORD=test
+    depends_on:
+      oracle:
+        condition: service_healthy
+    networks:
+      spring-net:
+
+
+networks:
+  spring-net:
+    driver: bridge
