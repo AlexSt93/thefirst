@@ -46,19 +46,21 @@ public class CityController implements CityControllerApi {
     }
 
     @Override
-    public ResponseEntity<Void> addCity(CityRequest cityRequest) {
+    public ResponseEntity<CityResponse> addCity(CityRequest cityRequest) {
         try {
-            worldDataService.addCity(cityRequest);
-            return ResponseEntity.ok().build();
+            City city = worldDataService.addCity(cityRequest);
+            return ResponseEntity.ok(new CityResponse(city));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @Override
-    public ResponseEntity<Void> deleteCity(Integer countryId) {
+    public ResponseEntity<Void> deleteCity(Integer cityId) {
         try {
-            worldDataService.deleteCityById(countryId);
+            worldDataService.deleteCityById(cityId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();

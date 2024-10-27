@@ -20,11 +20,11 @@ public interface CityControllerApi {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Returns nothing in case of success"
+                    description = "Returns the City in case of success"
             )
     })
     @PutMapping("/")
-    ResponseEntity<Void> addCity(@RequestBody CityRequest cityRequest);
+    ResponseEntity<CityResponse> addCity(@RequestBody CityRequest cityRequest);
 
     @Operation(summary = "Deletes a City from database")
     @ApiResponses(value = {

@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: thefirst
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/XEPDB1
+    username: test
+    password: test
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      schema: test
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+    database-platform: oracle.jdbc.OracleDriver
+server:
+  port: 8081

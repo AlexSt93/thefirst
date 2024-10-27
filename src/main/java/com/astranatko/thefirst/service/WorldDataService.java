@@ -45,15 +45,15 @@ public class WorldDataService {
         return cityRepository.findByCountryId(countryId);
     }
 
-    public void addCity(CityRequest cityRequest) {
+    public City addCity(CityRequest cityRequest) {
         Optional<City> foundCity = cityRepository.findByIdOrName(cityRequest.getId(), cityRequest.getName());
         if (foundCity.isEmpty()) {
             Country foundCountry = countryRepository.findById(cityRequest.getCountryId())
                     .orElseThrow(() -> new RuntimeException ("The country " + cityRequest.getCountryId() + " doesn't exist"));
             City newCity = new City(cityRequest.getName(), foundCountry);
-            cityRepository.save(newCity);
+            return cityRepository.save(newCity);
         } else {
-            throw new RuntimeException("The city " + cityRequest.getName() + " already exists");
+            throw new IllegalStateException("The city " + cityRequest.getName() + " already exists");
         }
     }
 
